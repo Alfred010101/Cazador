@@ -36,6 +36,10 @@ public class VentanaControlador implements Runnable
             
             Perro perro = new Perro(ventana.getPerro(), ventana.getPane());
             perro.intro();
+            while (true)
+            {                
+                
+            }
         }
     }
 
