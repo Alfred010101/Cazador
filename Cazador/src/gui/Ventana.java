@@ -1,6 +1,6 @@
-
 package gui;
 
+import hilos.VentanaControlador;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,8 +13,9 @@ import javax.swing.JLayeredPane;
  */
 public class Ventana extends JFrame
 {
+
     private JLayeredPane layeredPane;
-    
+
     public Ventana()
     {
         super("Duck Hunt 2.0");
@@ -42,6 +43,8 @@ public class Ventana extends JFrame
         lblFondo2.setBounds(0, 0, n2.getIconWidth(), n2.getIconHeight());
         layeredPane.add(lblFondo1, Integer.valueOf(0));
         layeredPane.add(lblFondo2, Integer.valueOf(2));
+
+        new Thread(new VentanaControlador(this)).start();
     }
-    
+
 }
