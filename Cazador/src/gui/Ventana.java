@@ -1,10 +1,14 @@
 package gui;
 
 import hilos.VentanaControlador;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
@@ -80,6 +84,14 @@ public class Ventana extends JFrame
 //    }
     private void initComponets()
     {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image cursorImage = toolkit.getImage("src/gui/img/apuntador.png");
+
+        Point hotspot = new Point(cursorImage.getWidth(null) / 2, cursorImage.getHeight(null) /  2); // Punto de referencia
+        Cursor customCursor = toolkit.createCustomCursor(cursorImage, hotspot, "Cursor Personalizado");
+        // Aplicar el cursor al JFrame
+        setCursor(customCursor);
+        
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(525, 480));
         setContentPane(layeredPane);
