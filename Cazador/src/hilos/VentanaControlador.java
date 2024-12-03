@@ -1,6 +1,6 @@
 package hilos;
 
-import javax.swing.JFrame;
+import gui.Ventana;
 import javax.swing.JOptionPane;
 
 /**
@@ -10,9 +10,9 @@ import javax.swing.JOptionPane;
 public class VentanaControlador implements Runnable
 {
 
-    JFrame ventana;
+    Ventana ventana;
 
-    public VentanaControlador(JFrame ventana)
+    public VentanaControlador(Ventana ventana)
     {
         this.ventana = ventana;
     }
@@ -33,6 +33,9 @@ public class VentanaControlador implements Runnable
             {
                 System.exit(0);
             }
+            
+            Perro perro = new Perro(ventana.getPerro(), ventana.getPane());
+            perro.intro();
         }
     }
 

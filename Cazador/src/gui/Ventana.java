@@ -15,7 +15,8 @@ public class Ventana extends JFrame
 {
 
     private JLayeredPane layeredPane;
-
+    private JLabel perro;
+    
     public Ventana()
     {
         super("Duck Hunt 2.0");
@@ -24,6 +25,30 @@ public class Ventana extends JFrame
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initComponets();
+    }
+    
+        /**
+     * @return the layeredPane
+     */
+    public JLayeredPane getPane()
+    {
+        return layeredPane;
+    }
+
+    /**
+     * @return the perro
+     */
+    public JLabel getPerro()
+    {
+        return perro;
+    }
+
+    /**
+     * @param perro the perro to set
+     */
+    public void setPerro(JLabel perro)
+    {
+        this.perro = perro;
     }
 
     private void initComponets()
@@ -44,6 +69,8 @@ public class Ventana extends JFrame
         layeredPane.add(lblFondo1, Integer.valueOf(0));
         layeredPane.add(lblFondo2, Integer.valueOf(2));
 
+        perro = new JLabel();
+        layeredPane.add(perro, Integer.valueOf(3));
         new Thread(new VentanaControlador(this)).start();
     }
 
