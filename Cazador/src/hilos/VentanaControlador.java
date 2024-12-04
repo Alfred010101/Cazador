@@ -1,6 +1,8 @@
 package hilos;
 
 import gui.Ventana;
+import java.util.Random;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +22,9 @@ public class VentanaControlador implements Runnable
     @Override
     public void run()
     {
+        Perro perro = new Perro(ventana.getPerro(), ventana.getPane());
+        perro.intro();
+            
         while (true)
         {
             int numeroPatos = validarEntrada("Ingrese el número de patos");
@@ -34,11 +39,59 @@ public class VentanaControlador implements Runnable
                 System.exit(0);
             }
             
-            Perro perro = new Perro(ventana.getPerro(), ventana.getPane());
-            perro.intro();
-            while (true)
-            {                
-                
+            Random rand = new Random();
+            int trayectoria = -1;
+            int tmp;
+
+            for (int i = 0; i < numeroPatos; i++)
+            {
+                String color = switch (rand.nextInt(3))
+                {
+                    case 0 ->
+                        "azul";
+                    case 1 ->
+                        "negro";
+                    case 2 ->
+                        "rojo";
+                    default ->
+                        "negro";
+                };
+
+                do
+                {
+                    tmp = rand.nextInt(15);
+                } while (trayectoria == tmp);
+                trayectoria = tmp;
+
+                ventana.getPatos().add(new Pato(new JLabel(), color, trayectoria));
+            }
+            System.out.println(ventana.getPatos().size());
+            Thread[] hilosEjucutar = new Thread[numeroPatos];
+
+            for (int i = 0; i < numeroPatos; i++)
+            {
+                Pato patoEjucutar = ventana.getPatos().poll();
+                hilosEjucutar[i] = new Thread(patoEjucutar);
+                ventana.getPane().add(patoEjucutar.getImgPato(), Integer.valueOf(1));
+                hilosEjucutar[i].start();
+                try
+                {
+                    Thread.sleep(200);
+                } catch (InterruptedException ex)
+                {
+                    System.out.println(ex);
+                }
+            }
+
+            for (int i = 0; i < numeroPatos; i++)
+            {
+                try
+                {
+                    hilosEjucutar[i].join();
+                } catch (InterruptedException e)
+                {
+                    System.out.println(e);
+                }
             }
         }
     }

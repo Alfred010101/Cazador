@@ -1,5 +1,6 @@
 package gui;
 
+import hilos.Pato;
 import hilos.VentanaControlador;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -14,6 +15,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -33,6 +36,7 @@ public class Ventana extends JFrame
     private BufferedImage cazador;
     private JPanel cazadorLayer; // Capa donde se dibuja el arma
     private int mouseX = 0;
+    private Queue<Pato> patos;
 
     public Ventana()
     {
@@ -60,13 +64,6 @@ public class Ventana extends JFrame
         return perro;
     }
 
-//    /**
-//     * @param perro the perro to set
-//     */
-//    public void setPerro(JLabel perro)
-//    {
-//        this.perro = perro;
-//    }
     /**
      * @return the cazador
      */
@@ -74,14 +71,15 @@ public class Ventana extends JFrame
     {
         return cazador;
     }
-
-//    /**
-//     * @param cazador the cazador to set
-//     */
-//    public void setCazador(JLabel cazador)
-//    {
-//        this.cazador = cazador;
-//    }
+    
+    /**
+     * @return the patos
+     */
+    public Queue<Pato> getPatos()
+    {
+        return patos;
+    }
+    
     private void initComponets()
     {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -154,6 +152,8 @@ public class Ventana extends JFrame
             }
         });
 
+        patos = new LinkedList<>();
+        
         new Thread(new VentanaControlador(this)).start();
     }
 }
