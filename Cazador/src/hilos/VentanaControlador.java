@@ -2,6 +2,8 @@ package hilos;
 
 import gui.Ventana;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -12,7 +14,8 @@ import javax.swing.JOptionPane;
 public class VentanaControlador implements Runnable
 {
 
-    Ventana ventana;
+    private final Ventana ventana;
+    private boolean banderaInicio = true;
 
     public VentanaControlador(Ventana ventana)
     {
@@ -23,7 +26,7 @@ public class VentanaControlador implements Runnable
     public void run()
     {
         Perro perro = new Perro(ventana.getPerro(), ventana.getPane());
-        perro.intro();
+        
             
         while (true)
         {
@@ -39,6 +42,19 @@ public class VentanaControlador implements Runnable
                 System.exit(0);
             }
             
+            Thread hiloIntro = new Thread();
+            if (banderaInicio)
+            {
+                hiloIntro = new Thread(() ->
+                {
+                    System.out.println("Entro");
+                    perro.intro();
+                    System.out.println("Sigui");
+                });   
+                
+                hiloIntro.start();
+            }
+            System.out.println("Salio");
             Random rand = new Random();
             int trayectoria = -1;
             int tmp;
@@ -61,11 +77,24 @@ public class VentanaControlador implements Runnable
                 {
                     tmp = rand.nextInt(15);
                 } while (trayectoria == tmp);
-                trayectoria = tmp;
+                trayectoria = 0;
 
                 ventana.getPatos().add(new Pato(new JLabel(), color, trayectoria));
             }
-            System.out.println(ventana.getPatos().size());
+            
+            if (banderaInicio)
+            {
+                try
+                {
+                    hiloIntro.join();
+                } catch (InterruptedException ex)
+                {
+                    System.out.println(ex);
+                }
+                banderaInicio = !banderaInicio;
+                ventana.getCazadorLayer().setVisible(true);
+            }
+            
             Thread[] hilosEjucutar = new Thread[numeroPatos];
 
             for (int i = 0; i < numeroPatos; i++)

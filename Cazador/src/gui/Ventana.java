@@ -37,7 +37,7 @@ public class Ventana extends JFrame
     private JPanel cazadorLayer; // Capa donde se dibuja el arma
     private int mouseX = 0;
     private Queue<Pato> patos;
-
+    
     public Ventana()
     {
         super("Duck Hunt 2.0");
@@ -55,6 +55,15 @@ public class Ventana extends JFrame
     {
         return layeredPane;
     }
+    
+     /**
+     * @return the cazadorLayer
+     */
+    public JPanel getCazadorLayer()
+    {
+        return cazadorLayer;
+    }
+
 
     /**
      * @return the perro
@@ -151,6 +160,7 @@ public class Ventana extends JFrame
                 cazadorLayer.repaint();
             }
         });
+        cazadorLayer.setVisible(false);
 
         patos = new LinkedList<>();
         
