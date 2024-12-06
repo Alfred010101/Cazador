@@ -2,8 +2,6 @@ package hilos;
 
 import gui.Ventana;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -26,8 +24,7 @@ public class VentanaControlador implements Runnable
     public void run()
     {
         Perro perro = new Perro(ventana.getPerro(), ventana.getPane());
-        
-            
+        Thread hiloIntro = null;
         while (true)
         {
             int numeroPatos = validarEntrada("Ingrese el número de patos");
@@ -42,19 +39,17 @@ public class VentanaControlador implements Runnable
                 System.exit(0);
             }
             
-            Thread hiloIntro = new Thread();
+            
             if (banderaInicio)
             {
                 hiloIntro = new Thread(() ->
                 {
-                    System.out.println("Entro");
                     perro.intro();
-                    System.out.println("Sigui");
                 });   
                 
                 hiloIntro.start();
             }
-            System.out.println("Salio");
+            
             Random rand = new Random();
             int trayectoria = -1;
             int tmp;
@@ -79,10 +74,10 @@ public class VentanaControlador implements Runnable
                 } while (trayectoria == tmp);
                 trayectoria = 0;
 
-                ventana.getPatos().add(new Pato(new JLabel(), color, trayectoria));
+                ventana.getPatos().add(new Pato(new JLabel(), color, trayectoria, perro));
             }
             
-            if (banderaInicio)
+            if (banderaInicio && hiloIntro != null)
             {
                 try
                 {

@@ -1,6 +1,8 @@
 package hilos;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -16,11 +18,49 @@ public class Perro
     private final JLabel imgPerro;
     private final JLayeredPane layeredPane;
     private final String PATH = "src/gui/img/perro/";
+    private boolean ocupado = false;
+    private final List<Point> coordenadas;
+    private final List<Point> pcCoordendas;
 
     public Perro(JLabel imgPerro, JLayeredPane layeredPane)
     {
         this.imgPerro = imgPerro;
         this.layeredPane = layeredPane;
+
+        coordenadas = List.of(
+                new Point(220, 280),
+                new Point(220, 275),
+                new Point(220, 270),
+                new Point(220, 265),
+                new Point(220, 260),
+                new Point(220, 255),
+                new Point(220, 250),
+                new Point(220, 245),
+                new Point(220, 240),
+                new Point(220, 235),
+                new Point(220, 230),
+                new Point(220, 225),
+                new Point(220, 220)
+        );
+
+        pcCoordendas = new ArrayList<>(coordenadas);
+        Collections.reverse(pcCoordendas);
+    }
+
+    /**
+     * @return the ocupado
+     */
+    public boolean isOcupado()
+    {
+        return ocupado;
+    }
+
+    /**
+     * @param ocupado the ocupado to set
+     */
+    public void setOcupado(boolean ocupado)
+    {
+        this.ocupado = ocupado;
     }
 
     public void intro()
@@ -62,6 +102,14 @@ public class Perro
         accionSaltar(saltarCoordenadas, "dogjump1.png", 90);
         layeredPane.setLayer(imgPerro, 1);
         accionSaltar(caerCoordenadas, "dogjump2.png", 90);
+        imgPerro.setIcon(null);
+    }
+
+    public void atrapar(int x)
+    {
+        subir(x, coordenadas, "oneDuck.png");
+        pausar(300);
+        subir(x, pcCoordendas, "oneDuck.png");
         imgPerro.setIcon(null);
     }
 
@@ -107,6 +155,18 @@ public class Perro
         imgPerro.setIcon(imagen);
         imgPerro.setBounds(coordenadas.x, coordenadas.y, imagen.getIconWidth(), imagen.getIconHeight());
         pausar(delay);
+    }
+
+    private void subir(int xPos, List<Point> coordenadas, String sources)
+    {
+        ImageIcon imagen;
+        imagen = new ImageIcon(PATH + sources);
+        imgPerro.setIcon(imagen);
+        for (int x = 0; x < coordenadas.size(); x++)
+        {
+            imgPerro.setBounds(xPos, coordenadas.get(x).y, imagen.getIconWidth(), imagen.getIconHeight());
+            pausar(60);
+        }
     }
 
     private void pausar(int delay)
