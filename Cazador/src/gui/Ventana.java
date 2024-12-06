@@ -2,8 +2,10 @@ package gui;
 
 import hilos.Pato;
 import hilos.VentanaControlador;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -37,7 +39,12 @@ public class Ventana extends JFrame
     private JPanel cazadorLayer; // Capa donde se dibuja el arma
     private int mouseX = 0;
     private Queue<Pato> patos;
-    
+
+    private JLabel lblInputPatos;
+    private JLabel lblOutputPatos;
+    private JLabel lblInputBalas;
+    private JLabel lblOutputBalas;
+
     public Ventana()
     {
         super("Duck Hunt 2.0");
@@ -55,15 +62,14 @@ public class Ventana extends JFrame
     {
         return layeredPane;
     }
-    
-     /**
+
+    /**
      * @return the cazadorLayer
      */
     public JPanel getCazadorLayer()
     {
         return cazadorLayer;
     }
-
 
     /**
      * @return the perro
@@ -80,7 +86,7 @@ public class Ventana extends JFrame
     {
         return cazador;
     }
-    
+
     /**
      * @return the patos
      */
@@ -89,16 +95,48 @@ public class Ventana extends JFrame
         return patos;
     }
     
+     /**
+     * @return the lblInputPatos
+     */
+    public JLabel getLblInputPatos()
+    {
+        return lblInputPatos;
+    }
+    
+    /**
+     * @return the lblOutputPatos
+     */
+    public JLabel getLblOutputPatos()
+    {
+        return lblOutputPatos;
+    }
+
+    /**
+     * @return the lblInputBalas
+     */
+    public JLabel getLblInputBalas()
+    {
+        return lblInputBalas;
+    }
+
+    /**
+     * @return the lblOutputBalas
+     */
+    public JLabel getLblOutputBalas()
+    {
+        return lblOutputBalas;
+    }
+
     private void initComponets()
     {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image cursorImage = toolkit.getImage("src/gui/img/apuntador.png");
 
-        Point hotspot = new Point(cursorImage.getWidth(null) / 2, cursorImage.getHeight(null) /  2); // Punto de referencia
+        Point hotspot = new Point(cursorImage.getWidth(null) / 2, cursorImage.getHeight(null) / 2); // Punto de referencia
         Cursor customCursor = toolkit.createCustomCursor(cursorImage, hotspot, "Cursor Personalizado");
         // Aplicar el cursor al JFrame
         setCursor(customCursor);
-        
+
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(525, 480));
         setContentPane(layeredPane);
@@ -114,6 +152,11 @@ public class Ventana extends JFrame
         lblFondo2.setBounds(0, 0, n2.getIconWidth(), n2.getIconHeight());
         layeredPane.add(lblFondo2, Integer.valueOf(2));
 
+        lblInputPatos = initJLabel(lblInputPatos, 0, 350);
+        lblOutputPatos = initJLabel(lblOutputPatos, 15, 370);
+        lblInputBalas = initJLabel(lblInputBalas, 2, 390);
+        lblOutputBalas = initJLabel(lblOutputBalas, 16, 410);
+        
         perro = new JLabel();
         layeredPane.add(perro, Integer.valueOf(3));
 
@@ -163,7 +206,18 @@ public class Ventana extends JFrame
         cazadorLayer.setVisible(false);
 
         patos = new LinkedList<>();
-        
+
         new Thread(new VentanaControlador(this)).start();
+    }
+    
+    private JLabel initJLabel(JLabel lbl, int x, int y)
+    {
+        lbl = new JLabel();
+        lbl.setFont(new Font("Arial", Font.BOLD, 18));
+        lbl.setPreferredSize(new Dimension(300, 30));
+        lbl.setBounds(x, y, lbl.getPreferredSize().width, lbl.getPreferredSize().height);
+        lbl.setForeground(Color.WHITE);
+        layeredPane.add(lbl, Integer.valueOf(4));
+        return lbl;
     }
 }

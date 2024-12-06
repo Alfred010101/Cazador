@@ -90,6 +90,11 @@ public class VentanaControlador implements Runnable
                 ventana.getCazadorLayer().setVisible(true);
             }
             
+            ventana.getLblInputPatos().setText("Patos ingresados: " + numeroPatos);
+            ventana.getLblOutputPatos().setText("Patos restantes: " + numeroBalas);
+            ventana.getLblInputBalas().setText("Balas ingresadas: " + numeroBalas);
+            ventana.getLblOutputBalas().setText("Balas restantes: " + numeroBalas);
+            
             Thread[] hilosEjucutar = new Thread[numeroPatos];
 
             for (int i = 0; i < numeroPatos; i++)
