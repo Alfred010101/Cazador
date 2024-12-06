@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
@@ -44,6 +45,11 @@ public class Ventana extends JFrame
     private JLabel lblOutputPatos;
     private JLabel lblInputBalas;
     private JLabel lblOutputBalas;
+
+    public static int contadorBalas = 0;
+    public static int contadorPatos = 0;
+    public static int nP = 0;
+    public static int nB = 0;
 
     public Ventana()
     {
@@ -94,15 +100,15 @@ public class Ventana extends JFrame
     {
         return patos;
     }
-    
-     /**
+
+    /**
      * @return the lblInputPatos
      */
     public JLabel getLblInputPatos()
     {
         return lblInputPatos;
     }
-    
+
     /**
      * @return the lblOutputPatos
      */
@@ -132,7 +138,8 @@ public class Ventana extends JFrame
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image cursorImage = toolkit.getImage("src/gui/img/apuntador.png");
 
-        Point hotspot = new Point(cursorImage.getWidth(null) / 2, cursorImage.getHeight(null) / 2); // Punto de referencia
+//        Point hotspot = new Point(cursorImage.getWidth(null) / 2, cursorImage.getHeight(null) / 2); // Punto de referencia
+        Point hotspot = new Point(15, 15); // Punto de referencia
         Cursor customCursor = toolkit.createCustomCursor(cursorImage, hotspot, "Cursor Personalizado");
         // Aplicar el cursor al JFrame
         setCursor(customCursor);
@@ -156,7 +163,7 @@ public class Ventana extends JFrame
         lblOutputPatos = initJLabel(lblOutputPatos, 15, 370);
         lblInputBalas = initJLabel(lblInputBalas, 2, 390);
         lblOutputBalas = initJLabel(lblOutputBalas, 16, 410);
-        
+
         perro = new JLabel();
         layeredPane.add(perro, Integer.valueOf(3));
 
@@ -203,13 +210,27 @@ public class Ventana extends JFrame
                 cazadorLayer.repaint();
             }
         });
+        
+        layeredPane.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                if (contadorBalas > 0)
+                {
+                    lblOutputBalas.setText("Balas restantes: " + (--contadorBalas));
+                    lblOutputPatos.setText("Patos restantes: " + contadorPatos);
+                }                
+            }
+        });
+        
         cazadorLayer.setVisible(false);
 
         patos = new LinkedList<>();
 
         new Thread(new VentanaControlador(this)).start();
     }
-    
+
     private JLabel initJLabel(JLabel lbl, int x, int y)
     {
         lbl = new JLabel();

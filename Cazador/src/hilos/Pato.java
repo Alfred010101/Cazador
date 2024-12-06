@@ -1,10 +1,13 @@
 package hilos;
 
+import gui.Ventana;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -20,12 +23,13 @@ public class Pato implements Runnable
     private boolean morido = false;
     private final TrayectoriaVuelo TRAYECTORIA;
     private final Perro perro;
-    
-    public Pato(JLabel imgPato, String color, int trayectoria, Perro perro)
+    private final JLayeredPane layeredPane;
+    public Pato(JLabel imgPato, String color, int trayectoria, Perro perro, JLayeredPane layeredPane)
     {
         this.imgPato = imgPato;
         this.delay = 70;
         this.perro = perro;
+        this.layeredPane = layeredPane;
         PATH = "src/gui/img/patos/" + color + "/";
         TRAYECTORIA = new TrayectoriaVuelo(trayectoria);
         initComponents();
@@ -49,7 +53,9 @@ public class Pato implements Runnable
                 if (!morido)
                 {
                     morido = !morido;
+                    Ventana.contadorPatos--;
                 }
+                e.getComponent().getParent().dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, layeredPane));
             }
         });
     }
@@ -70,17 +76,18 @@ public class Pato implements Runnable
                     imgPato.setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
 
                     Thread.sleep(delay);
-
-//                    Contador.setPuntaje(switch(color)
-//                            {
-//                                case "negro" -> 200;
-//                                case "rojo" -> 150;
-//                                case "azul" -> 100;
-//                                default -> 100;
-//                            });
+                    
+                    if(Ventana.contadorBalas == 0)
+                    {
+                        imgPato.setIcon(null);
+                        break;
+                    }
                 }
-            } while (!morido);
+            } while (!morido && Ventana.contadorBalas > 0);
             
+            if (morido)
+            {
+              
             if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
             {
                 imagen = new ImageIcon(PATH + "scaredRight.png");
@@ -114,6 +121,8 @@ public class Pato implements Runnable
                 perro.setOcupado(true);
                 perro.atrapar(punto.x - 40);
                 perro.setOcupado(false);
+            }
+            
             }
         } catch (InterruptedException ex)
         {

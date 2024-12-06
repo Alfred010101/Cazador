@@ -39,6 +39,10 @@ public class VentanaControlador implements Runnable
                 System.exit(0);
             }
             
+            Ventana.nP = numeroPatos;
+            Ventana.contadorPatos = numeroPatos;
+            Ventana.nB = numeroBalas;
+            Ventana.contadorBalas = numeroBalas;
             
             if (banderaInicio)
             {
@@ -74,7 +78,7 @@ public class VentanaControlador implements Runnable
                 } while (trayectoria == tmp);
                 trayectoria = 0;
 
-                ventana.getPatos().add(new Pato(new JLabel(), color, trayectoria, perro));
+                ventana.getPatos().add(new Pato(new JLabel(), color, trayectoria, perro, ventana.getPane()));
             }
             
             if (banderaInicio && hiloIntro != null)
@@ -91,28 +95,29 @@ public class VentanaControlador implements Runnable
             }
             
             ventana.getLblInputPatos().setText("Patos ingresados: " + numeroPatos);
-            ventana.getLblOutputPatos().setText("Patos restantes: " + numeroBalas);
+            ventana.getLblOutputPatos().setText("Patos restantes: " + numeroPatos);
             ventana.getLblInputBalas().setText("Balas ingresadas: " + numeroBalas);
             ventana.getLblOutputBalas().setText("Balas restantes: " + numeroBalas);
             
             Thread[] hilosEjucutar = new Thread[numeroPatos];
 
-            for (int i = 0; i < numeroPatos; i++)
+            int j;
+            for (j = 0; j < numeroPatos && Ventana.contadorBalas > 0; j++)
             {
                 Pato patoEjucutar = ventana.getPatos().poll();
-                hilosEjucutar[i] = new Thread(patoEjucutar);
+                hilosEjucutar[j] = new Thread(patoEjucutar);
                 ventana.getPane().add(patoEjucutar.getImgPato(), Integer.valueOf(1));
-                hilosEjucutar[i].start();
+                hilosEjucutar[j].start();
                 try
                 {
-                    Thread.sleep(200);
+                    Thread.sleep(400);
                 } catch (InterruptedException ex)
                 {
                     System.out.println(ex);
                 }
             }
 
-            for (int i = 0; i < numeroPatos; i++)
+            for (int i = 0; i < numeroPatos && i < j; i++)
             {
                 try
                 {
