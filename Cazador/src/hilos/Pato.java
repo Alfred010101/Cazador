@@ -24,6 +24,7 @@ public class Pato implements Runnable
     private final TrayectoriaVuelo TRAYECTORIA;
     private final Perro perro;
     private final JLayeredPane layeredPane;
+
     public Pato(JLabel imgPato, String color, int trayectoria, Perro perro, JLayeredPane layeredPane)
     {
         this.imgPato = imgPato;
@@ -76,53 +77,51 @@ public class Pato implements Runnable
                     imgPato.setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
 
                     Thread.sleep(delay);
-                    
-                    if(Ventana.contadorBalas == 0)
+
+                    if (Ventana.contadorBalas == 0)
                     {
                         imgPato.setIcon(null);
                         break;
                     }
                 }
             } while (!morido && Ventana.contadorBalas > 0);
-            
+
             if (morido)
             {
-              
-            if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
-            {
-                imagen = new ImageIcon(PATH + "scaredRight.png");
-            } else
-            {
-                imagen = new ImageIcon(PATH + "scaredLeft.png");
-            }
-            imgPato.setIcon(imagen);
-            imgPato.setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
 
-//                    Contador.lblContPatos.setText("Patos Cazdos : " + Contador.getTotalMoridos());
-//                    Contador.lblPuntaje.setText("Puntaje : " + Contador.getPuntaje());
-            Thread.sleep(250);
-
-            int a = 1;
-            int posY = punto.y;
-            while (posY < 300)
-            {
-                imagen = new ImageIcon(PATH + "duckfall" + a + ".png");
+                if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
+                {
+                    imagen = new ImageIcon(PATH + "scaredRight.png");
+                } else
+                {
+                    imagen = new ImageIcon(PATH + "scaredLeft.png");
+                }
                 imgPato.setIcon(imagen);
-                imgPato.setBounds(punto.x, posY, imagen.getIconWidth(), imagen.getIconHeight());
-                posY += 10;
-                a = (a == 1) ? 2 : 1;
+                imgPato.setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
 
-                Thread.sleep(40);
-            }
-            imgPato.setIcon(null);
-            
-            if (!perro.isOcupado())
-            {
-                perro.setOcupado(true);
-                perro.atrapar(punto.x - 40);
-                perro.setOcupado(false);
-            }
-            
+                Thread.sleep(250);
+
+                int a = 1;
+                int posY = punto.y;
+                while (posY < 300)
+                {
+                    imagen = new ImageIcon(PATH + "duckfall" + a + ".png");
+                    imgPato.setIcon(imagen);
+                    imgPato.setBounds(punto.x, posY, imagen.getIconWidth(), imagen.getIconHeight());
+                    posY += 10;
+                    a = (a == 1) ? 2 : 1;
+
+                    Thread.sleep(40);
+                }
+                imgPato.setIcon(null);
+
+                if (!perro.isOcupado())
+                {
+                    perro.setOcupado(true);
+                    perro.atrapar(punto.x - 40);
+                    perro.setOcupado(false);
+                }
+
             }
         } catch (InterruptedException ex)
         {
